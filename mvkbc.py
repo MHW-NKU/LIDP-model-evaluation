@@ -24,15 +24,6 @@ def multi_view_patches_extraction(img_3d):
     view2 = img_3d[:, :, 31, :, :]
     view3 = img_3d[:, :, :, 31, :]
 
-    # # 图像可视化----------------------------
-    # ax1 = plt.subplot2grid((3, 3), (0, 0))
-    # ax1.imshow(np.empty(view1[0, 0].shape) + view1[0, 0], cmap='gray')
-    # ax2 = plt.subplot2grid((3, 3), (0, 1))
-    # ax2.imshow(np.empty(view2[0, 0].shape) + view2[0, 0], cmap='gray')
-    # ax3 = plt.subplot2grid((3, 3), (0, 2))
-    # ax3.imshow(np.empty(view3[0, 0].shape) + view3[0, 0], cmap='gray')
-    # # ------------------------------------
-
     view1 = torch.from_numpy(view1).cuda()
     view2 = torch.from_numpy(view2).cuda()
     view3 = torch.from_numpy(view3).cuda()
@@ -43,12 +34,6 @@ def multi_view_patches_extraction(img_3d):
         for j in range(img_3d_shape[2]):
             view4[:, :, i, j] = img_3d[:, :, i, j, img_3d_shape[2] - 1 - i]
 
-    # # 图像可视化----------------------------
-    # ax4 = plt.subplot2grid((3, 3), (1, 0))
-    # ax4.imshow(view4[0, 0],
-    #            cmap='gray')
-    # # ------------------------------------
-
     view4 = torch.from_numpy(view4).cuda()
     view4 = view4.type(torch.cuda.FloatTensor)
 
@@ -58,11 +43,6 @@ def multi_view_patches_extraction(img_3d):
         for j in range(img_3d_shape[2]):
             view5[:, :, i, j] = img_3d[:, :, img_3d_shape[2] - 1 - i, j, img_3d_shape[2] - 1 - i]
 
-    # # 图像可视化----------------------------
-    # ax5 = plt.subplot2grid((3, 3), (1, 1))
-    # ax5.imshow(view5[0, 0],
-    #            cmap='gray')
-    # # ------------------------------------
     view5 = torch.from_numpy(view5).cuda()
     view5 = view5.type(torch.cuda.FloatTensor)
 
@@ -71,11 +51,7 @@ def multi_view_patches_extraction(img_3d):
         # view6[batch, channel].append([])
         for j in range(img_3d_shape[2]):
             view6[:, :, i, j] = img_3d[:, :, j, img_3d_shape[2] - 1 - i, img_3d_shape[2] - 1 - i]
-    # # 图像可视化----------------------------
-    # ax6 = plt.subplot2grid((3, 3), (1, 2))
-    # ax6.imshow(view6[0, 0],
-    #            cmap='gray')
-    # # ------------------------------------
+
     view6 = torch.from_numpy(view6).cuda()
     view6 = view6.type(torch.cuda.FloatTensor)
 
@@ -84,11 +60,7 @@ def multi_view_patches_extraction(img_3d):
         # view7[batch, channel].append([])
         for j in range(img_3d_shape[2]):
             view7[:, :, i, j] = img_3d[:, :, j, i, img_3d_shape[2] - 1 - i]
-    # # 图像可视化----------------------------
-    # ax7 = plt.subplot2grid((3, 3), (2, 0))
-    # ax7.imshow(view7[0, 0],
-    #            cmap='gray')
-    # # ------------------------------------
+
     view7 = torch.from_numpy(view7).cuda()
     view7 = view7.type(torch.cuda.FloatTensor)
 
@@ -97,11 +69,7 @@ def multi_view_patches_extraction(img_3d):
         # view8[batch, channel].append([])
         for j in range(img_3d_shape[2]):
             view8[:, :, i, j] = img_3d[:, :, img_3d_shape[2] - 1 - i, i, j]
-    # # 图像可视化----------------------------
-    # ax8 = plt.subplot2grid((3, 3), (2, 1))
-    # ax8.imshow(view8[0, 0],
-    #            cmap='gray')
-    # # ------------------------------------
+
     view8 = torch.from_numpy(view8).cuda()
     view8 = view8.type(torch.cuda.FloatTensor)
 
@@ -110,13 +78,7 @@ def multi_view_patches_extraction(img_3d):
         # view9[batch, channel].append([])
         for j in range(img_3d_shape[2]):
             view9[:, :, i, j] = img_3d[:, :, i, i, j]
-    # # 图像可视化----------------------------
-    # ax9 = plt.subplot2grid((3, 3), (2, 2))
-    # ax9.imshow(view9[0, 0],
-    #            cmap='gray')
-    # plt.tight_layout()
-    # plt.show()
-    # # ------------------------------------
+
     view9 = torch.from_numpy(view9).cuda()
     view9 = view9.type(torch.cuda.FloatTensor)
 
@@ -188,42 +150,10 @@ class KBC_submodel(nn.Module):
         )
 
     def forward(self, OA, HS, HVV):
-        # OA = x
-        #
-        # HS = OA.cpu().numpy()
-        # HVV = OA.cpu().numpy()
-        # HS[mask > 0.5] = 0
-        # HVV[mask <= 0.5] = 0
-        #
-        # HVV = HVV[:, :, 24:40, 24:40]
-        #
-        # HS = torch.from_numpy(HS).cuda()
-        # HS = HS.type(torch.cuda.FloatTensor)
-        # HVV = torch.from_numpy(HVV).cuda()
-        # HVV = HVV.type(torch.cuda.FloatTensor)
-        #
-        # OA = F.interpolate(OA, size=[224, 224])
-        # HS = F.interpolate(HS, size=[224, 224])
-        # HVV = F.interpolate(HVV, size=[224, 224])
-
-        # # 图像可视化----------------------------
-        # fig, ax = plt.subplots(1, 2, figsize=(15, 10))
-        # ax[0].imshow(OA[0, 0].cpu().detach().numpy(), cmap=plt.cm.gray)
-        # ax[0].axis('off')
-        # plt.show()
-        #
-        # fig, ax = plt.subplots(1, 2, figsize=(15, 10))
-        # ax[0].imshow(HS[0, 0].cpu().detach().numpy(), cmap=plt.cm.gray)
-        # ax[0].axis('off')
-        # ax[1].imshow(HVV[0, 0].cpu().detach().numpy(), cmap=plt.cm.gray)
-        # ax[1].axis('off')
-        # plt.show()
-        # # --------------------------------------
         out1 = self.resnet50_1(HS)
         out2 = self.resnet50_2(OA)
         out3 = self.resnet50_3(HVV)
 
-        # out = torch.cat((out1, out2), dim=1)
         out = torch.cat((out1, out2, out3), dim=1)
 
         out = self.fc(out)
@@ -238,8 +168,6 @@ class mvkbc(nn.Module):
     def __init__(self):
         super(mvkbc, self).__init__()
 
-        # for i in range(9):
-        #     setattr(self, 'unet' + str(i + 1), UNet2D())
         for i in range(9):
             for j in range(3):
                 setattr(self, 'resnet50_' + str(i + 1) + '_' + str(j + 1), resnet50.resnet50_pretrain(pretrain=True))
